@@ -1,0 +1,9 @@
+version: 2.1
+jobs:
+  lint:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: start container
+          command: docker version && docker image build -t app01 .
