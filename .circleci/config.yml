@@ -8,6 +8,7 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install package
           command: |
             pip -V
             apk add --no-cache \
@@ -16,7 +17,9 @@ jobs:
               curl musl-dev
             pip install --upgrade pip
             pip install -r requirements.txt
-            pycodestyle app.py
+      - run:
+          name: do lint
+          command: pycodestyle app.py
 
   build:
     machine: true
