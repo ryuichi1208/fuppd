@@ -16,7 +16,6 @@ jobs:
               curl musl-dev
             pip install --upgrade pip
             pip install -r requirements.txt
-            sudo pip install pipenv
             pycodestyle app.py
 
   build:
