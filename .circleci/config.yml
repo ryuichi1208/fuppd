@@ -9,10 +9,10 @@ jobs:
       - checkout
       - run:
           command: |
+            pip install --upgrade pip
+            pip install -r requirements.txt
             sudo pip install pipenv
-            ls -l
-            pwd
-            pip list
+            pycodestyle app.py
 
   build:
     machine: true
