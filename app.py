@@ -6,15 +6,35 @@ import re
 app = Flask(__name__)
 
 
-@app.route('/')
-def hello():
-    return f"Hello, World!\nIP:{request.remote_addr}\nPID:{os.getpid()}\n"
+def gen_counter():
+    """
+    アクセスカウンタ用の関数
+    """
+    cnt = 0
+
+    def _count():
+        nonlocal cnt
+        cnt += 1
+        return cnt
+    return _count
 
 
 def get_resource():
+    """
+    ホストのメトリクスを収集する関数
+    """
     return psutil.cpu_percent(interval=1), \
-            psutil.virtual_memory().percent, \
-            os.getloadavg()[0],
+        psutil.virtual_memory().percent, \
+        os.getloadavg()[0],
+
+
+# カウンタ用のクロージャ
+gc = gen_counter()
+
+
+@app.route('/')
+def hello():
+    return f"Hello, World!\nIP:{request.remote_addr}\nPID:{os.getpid()}\n"
 
 
 @app.route('/__health')
@@ -35,6 +55,11 @@ def test():
                 'LDG': ldg_per
             }
         )
+
+
+@app.route('/__count')
+def counter():
+    return "ACCESS : " + str(gc()) + "\n" + "PID : " + str(os.getpid()) + "\n"
 
 
 @app.errorhandler(404)

@@ -1,5 +1,7 @@
 from .. import app
 import pytest
 
-def test_get_resource():
-    assert app.get_resource()
+class TestCommon:
+
+    def test_get_resource(self):
+        assert app.get_resource()
