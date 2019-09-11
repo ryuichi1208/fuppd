@@ -31,6 +31,9 @@ jobs:
       - run:
           name: start container
           command: docker version && docker image build -t app01 .
+      - run:
+          name: start access
+          command: script/do_curl.sh
 
 workflows:
   version: 2
