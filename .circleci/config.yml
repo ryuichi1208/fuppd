@@ -20,6 +20,9 @@ jobs:
       - run:
           name: do lint
           command: pycodestyle app.py
+      - run:
+          name: do test
+          command: pytest -v
 
   build:
     machine: true

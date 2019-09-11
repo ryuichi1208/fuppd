@@ -11,14 +11,18 @@ def hello():
     return f"Hello, World!\nIP:{request.remote_addr}\nPID:{os.getpid()}\n"
 
 
-@app.route('/__test')
+def get_resource():
+    return psutil.cpu_percent(interval=1), \
+            psutil.virtual_memory().percent, \
+            os.getloadavg()[0],
+
+
+@app.route('/__health')
 def test():
     agent = request.headers.get('User-Agent')
 
     # ホストのリソース使用料を取得する
-    cpu_per = psutil.cpu_percent(interval=1)
-    mem_per = psutil.virtual_memory().percent
-    ldg_per = os.getloadavg()[0]
+    cpu_per, mem_per, ldg_per = get_resource()
 
     if "Mozilla" in agent:
         return render_template('index.html',
@@ -31,6 +35,12 @@ def test():
                 'LDG': ldg_per
             }
         )
+
+
+@app.errorhandler(404)
+def err_404(error):
+    response = jsonify({"message": "Not Found", "result": error.code})
+    return response, error.code
 
 
 if __name__ == '__main__':
