@@ -30,7 +30,7 @@ jobs:
       - checkout
       - run:
           name: build container image
-          command: DOCKER_BUILDKIT=1 ; docker version && docker image build -t fuppdImg01 .
+          command: DOCKER_BUILDKIT=1 ; docker version && docker image build -t fuppdimg01 .
       - run:
           name: check image
           command: docker image ls --all
