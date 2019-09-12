@@ -10,13 +10,13 @@ def gen_counter():
     """
     アクセスカウンタ用の関数
     """
-    cnt = 0
+    access_cnt = 0
 
-    def _count():
-        nonlocal cnt
-        cnt += 1
-        return cnt
-    return _count
+    def _count_add():
+        nonlocal access_cnt
+        access_cnt += 1
+        return access_cnt
+    return _count_add
 
 
 def get_resource():
