@@ -1,6 +1,7 @@
 version: 2.1
 jobs:
   lint:
+    working_directory: ~/workspace
     docker:
       - image: python:3.7.4-alpine3.10
         environment:
@@ -41,6 +42,16 @@ jobs:
           name: start access
           command: script/do_curl.sh
 
+  deploy:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: deploy
+          command: |
+            date
+            ls -l
+
 workflows:
   version: 2
   build_and_test:
@@ -49,3 +60,12 @@ workflows:
       - build:
           requires:
             - lint
+      - deploy:
+          requires:
+            - lint
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
