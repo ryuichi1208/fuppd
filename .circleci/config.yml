@@ -7,6 +7,14 @@ jobs:
         environment:
           PIPENV_VENV_IN_PROJECT: true
     steps:
+      - run:
+          name: apk add git
+          command: |
+            apk add \
+              --update \
+              --no-progress \
+              git \
+              openssh-client
       - checkout
       - run:
           name: install package
