@@ -4,7 +4,7 @@ CURL=$(which curl)
 CURL_OPT="-sSLI"
 
 FLASK_IPADDR=
-FLASK_PORT=$(cat settings/flask.ini | grep "FLASK_PORT" | cut -d = -f 2)
+FLASK_PORT=$(cat ./setup.cfg | grep "FLASK_PORT" | cut -d = -f 2)
 
 ENDPOINT=( ""
            "__health"

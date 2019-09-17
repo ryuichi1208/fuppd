@@ -27,7 +27,7 @@ jobs:
             pip install --upgrade pip
             pip install -r requirements.txt
       - run:
-          name: run black
+          name: run fomatting
           command: |
             black --diff app.py
             black app.py
@@ -36,10 +36,18 @@ jobs:
           command: pycodestyle app.py
       - run:
           name: run mypy
-          command: mypy app.py
+          command: |
+            mypy -V
+            mypy app.py
       - run:
           name: run test
           command: pytest -v
+      - run:
+          name: output report
+          command: |
+            pytest --cov . --cov-report=html:test-report
+      - store-test-results:
+          path: ./test-report
 
   build:
     machine: true
