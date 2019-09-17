@@ -46,8 +46,9 @@ jobs:
           name: output report
           command: |
             pytest --cov . --cov-report=html:test-report
-      - store-test-results:
+      - store_test_results:
           path: ./test-report
+
 
   build:
     machine: true
