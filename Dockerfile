@@ -18,4 +18,5 @@ RUN apk add --no-cache \
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["uwsgi", "--ini", "settings/app.ini"]
+ENTRYPOINT ["uwsgi", "--ini"]
+CMD ["settings/app.ini"]
