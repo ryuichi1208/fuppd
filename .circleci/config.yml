@@ -27,10 +27,18 @@ jobs:
             pip install --upgrade pip
             pip install -r requirements.txt
       - run:
-          name: do lint
+          name: run black
+          command: |
+            black --diff app.py
+            black app.py
+      - run:
+          name: run format check
           command: pycodestyle app.py
       - run:
-          name: do test
+          name: run mypy
+          command: mypy app.py
+      - run:
+          name: run test
           command: pytest -v
 
   build:

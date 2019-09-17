@@ -18,6 +18,7 @@ def gen_counter():
         nonlocal access_cnt
         access_cnt += 1
         return access_cnt
+
     return _count_add
 
 
@@ -25,41 +26,36 @@ def get_resource():
     """
     ホストのメトリクスを収集する関数
     """
-    return psutil.cpu_percent(interval=1), \
-        psutil.virtual_memory().percent, \
+    return (
+        psutil.cpu_percent(interval=1),
+        psutil.virtual_memory().percent,
         os.getloadavg()[0],
+    )
 
 
 # カウンタ用のクロージャ
 gc = gen_counter()
 
 
-@app.route('/')
+@app.route("/")
 def hello():
     return f"Hello, World!\nIP:{request.remote_addr}\nPID:{os.getpid()}\n"
 
 
-@app.route('/__health')
+@app.route("/__health")
 def test():
-    agent = request.headers.get('User-Agent')
+    agent = request.headers.get("User-Agent")
 
     # ホストのリソース使用料を取得する
     cpu_per, mem_per, ldg_per = get_resource()
 
     if "Mozilla" in agent:
-        return render_template('index.html',
-                               cpu=cpu_per, mem=mem_per, ldg=ldg_per)
+        return render_template("index.html", cpu=cpu_per, mem=mem_per, ldg=ldg_per)
     else:
-        return jsonify(
-            {
-                'CPU': cpu_per,
-                'MEM': mem_per,
-                'LDG': ldg_per
-            }
-        )
+        return jsonify({"CPU": cpu_per, "MEM": mem_per, "LDG": ldg_per})
 
 
-@app.route('/__count')
+@app.route("/__count")
 def counter():
     return "ACCESS : " + str(gc()) + "\n" + "PID : " + str(os.getpid()) + "\n"
 
@@ -70,5 +66,5 @@ def err_404(error):
     return response, error.code
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True)
